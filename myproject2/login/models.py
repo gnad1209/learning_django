@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
     address = models.CharField(max_length = 255,blank=True,null=True,)
     phone_number = models.CharField(max_length = 10,blank=True,null=True)
     #test
-    avatar = models.ImageField(upload_to='images/', blank=True, null=True)
+    avatar = models.ImageField(blank=True, null=True)
     REQUIRED_FIELDS = []
 
     def __str__(self):
