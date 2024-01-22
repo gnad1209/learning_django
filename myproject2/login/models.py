@@ -5,6 +5,7 @@ from django.utils import timezone
 from rest_framework.permissions import BasePermission
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from cloudinary.models import CloudinaryField
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
@@ -12,6 +13,8 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length = 10,blank=True,null=True)
     #test
     avatar = models.ImageField(blank=True, null=True)
+    # images = CloudinaryField('image')
+
     REQUIRED_FIELDS = []
 
     def __str__(self):

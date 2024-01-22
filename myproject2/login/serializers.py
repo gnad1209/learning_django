@@ -4,11 +4,14 @@ from .models import CustomUser,BlacklistedToken
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
 from django.core.validators import RegexValidator   
+import cloudinary.uploader
+from cloudinary.models import CloudinaryField
 
 class RegisterSerializer(serializers.ModelSerializer):
     address = serializers.CharField(max_length = 255)
     phone_number = serializers.CharField(max_length=10)
     avatar = serializers.ImageField()
+    # images = CloudinaryField('image')
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
@@ -30,6 +33,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             address=validated_data['address'],
             phone_number=validated_data['phone_number'],
             avatar=validated_data['avatar'],
+            # images = validated_data['images'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
         )

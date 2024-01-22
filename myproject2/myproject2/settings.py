@@ -14,6 +14,13 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from django.conf import settings
+import dj_database_url
+from os.path import join, dirname
+from dotenv import load_dotenv
+load_dotenv()
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,6 +53,8 @@ INSTALLED_APPS = [
     'login',
     'products',
     'django.contrib.sites',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -173,3 +182,12 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/images/'
+
+#upload clouddinary
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+'CLOUD_NAME': 'dklylkfoe',#os.environ.get("CLOUD_NAME"),
+'API_KEY': '294131542735918', #os.environ.get("API_KEY"),
+'API_SECRET': 'SB04sQAGi2fL2ZCLrKYvhOmvpas' #os.environ.get("API_SECRET")
+}
