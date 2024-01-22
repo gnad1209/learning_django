@@ -11,10 +11,11 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import BlacklistedTokenSerializer,LogoutSerializers,RegisterSerializer
+from .serializers import BlacklistedTokenSerializer,LogoutSerializers,RegisterSerializer,ChangePasswordSerializer
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, decorators
+from django.contrib.auth.hashers import check_password
 from django.views.decorators.csrf import csrf_exempt
 
 from django.contrib.auth import logout
@@ -82,3 +83,24 @@ class CustomUserView(APIView):
             'email': user.email,
         }
         return Response(user)
+    
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = request.user
+            old_password = serializer.validated_data['old_password']
+
+            if not check_password(old_password, user.password):
+                return Response({'detail': 'Old password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            new_password = serializer.validated_data['new_password']
+            user.set_password(new_password)
+            user.save()
+
+            return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
